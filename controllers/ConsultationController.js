@@ -3,12 +3,17 @@ const axios = require('axios');
 const { getAccessToken } = require('../services/getFlowTokens');
 
 // Power Automate flow endpoint
-const FLOW_URL = process.env.onboarding_flow_url;
+const FLOW_URL = process.env.consultation_flow_url;
+
+
+// Flow secret (if still required by the flow)
 const FLOW_SECRET = process.env.flow_secret;
+const ConsultationFlowSecret = process.env.consultation_flow_secret;
+
+// Function to get Azure AD access token
 
 
-
-const onBoarding = async (req, res) => {
+const BookConsultation = async (req, res) => {
 //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
 
 const {
@@ -60,7 +65,7 @@ const {
   }
 
   // Add flow_secret to the body (if required by the flow)
-  data.flow_secret = FLOW_SECRET;
+  data.flow_secret = ConsultationFlowSecret;
 
 //   console.log('Sending data to Power Automate:', data);
 
@@ -95,5 +100,5 @@ const {
 };
 
 module.exports = {
-  onBoarding,
+  BookConsultation,
 };

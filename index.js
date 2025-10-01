@@ -30,9 +30,10 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 const authroute = require('./routes/authRoute')
 const consultationroute = require('./routes/consultationRoutes')
 const partnerroute = require('./routes/partnerRoutes')
+const enquiryroute = require('./routes/EnquiryRoutes')
 
 // api endpoints
 app.use('/api/v1/auth', authroute)
 app.use('/api/v1/consultation', consultationroute)
 app.use('/api/v1/partner', partnerroute)
-
+app.use('/api/v1/enquiry', enquiryroute)

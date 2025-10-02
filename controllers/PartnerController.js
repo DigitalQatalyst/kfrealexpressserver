@@ -16,7 +16,7 @@ const CreatePartnerShip = async (req, res) => {
 //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
 
 const {
-  Name,Email,ServiceCategory
+  Name,Email,ServiceCategory,Message
   } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
@@ -26,7 +26,7 @@ const {
 
   // Construct the data object to be sent to Power Automate
   const data = {
-   Name,Email,ServiceCategory
+   Name,Email,ServiceCategory,Message
   };
 
   console.log('Sending partner data to Power Automate:', data);

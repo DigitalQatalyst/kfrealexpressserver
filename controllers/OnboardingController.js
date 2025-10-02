@@ -50,6 +50,8 @@ const {
 
   console.log('Sending data to Power Automate:', data);
   
+  return
+  
 //   console.log("data",data)
 //   console.log("my token",data.token)
 //   return

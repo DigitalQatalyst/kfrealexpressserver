@@ -6,13 +6,12 @@ const { getAccessToken } = require("../services/getFlowTokens");
 const FLOW_URL = process.env.consultation_flow_url;
 
 // Flow secret (if still required by the flow)
-const FLOW_SECRET = process.env.flow_secret;
+// const FLOW_SECRET = process.env.flow_secret;
 const ConsultationFlowSecret = process.env.consultation_flow_secret;
 
 // Function to get Azure AD access token
 
 const BookConsultation = async (req, res) => {
-  console.log("starting consultation....");
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
 
   const { Name, Nameofpersonmakingthesubmission, EmailAddress1 } = req.body; // Expect these fields to be passed in the body
@@ -55,6 +54,7 @@ const BookConsultation = async (req, res) => {
     // Get OAuth access token
 
     const accessToken = await getAccessToken();
+    console.log("📤 sending consultation request....");
 
     // Send request to Power Automate
     const response = await axios.post(FLOW_URL, data, {

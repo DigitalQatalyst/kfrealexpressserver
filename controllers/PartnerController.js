@@ -10,7 +10,7 @@ const PartnerFlowSecret = process.env.partners_flow_secret;
 
 const CreatePartnerShip = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
-  console.log("sending partner data.....");
+  console.log("📤 sending partner request....");
   const { Name, Email, ServiceCategory, Message } = req.body; // Expect these fields to be passed in the body
 
   // Validate input

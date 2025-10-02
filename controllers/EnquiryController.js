@@ -15,12 +15,10 @@ const CreateEnquiry = async (req, res) => {
 
   // Validate input
   if (!FirstName || !Email || !EnquiryType || !LastName || !Phone || !Message) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "Missing required fields: FirstName, Email, EnquiryType, LastName, or Phone",
-      });
+    return res.status(400).json({
+      error:
+        "Missing required fields: FirstName, Email, EnquiryType, LastName, or Phone",
+    });
   }
 
   // Construct the data object to be sent to Power Automate
@@ -33,7 +31,7 @@ const CreateEnquiry = async (req, res) => {
     Message,
   };
 
-  console.log("Sending enquiry data to Power Automate:", data);
+  console.log("📤 sending enquiry request....");
 
   //   console.log("data",data)
   //   console.log("my token",data.token)

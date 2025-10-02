@@ -36,12 +36,10 @@ const onBoarding = async (req, res) => {
 
   // Validate input
   if (!Email || !CompanyName || !Industry || !ContactName) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "Missing required fields: Email, CompanyName, Industry, or ContactName",
-      });
+    return res.status(400).json({
+      error:
+        "Missing required fields: Email, CompanyName, Industry, or ContactName",
+    });
   }
 
   // Construct the data object to be sent to Power Automate
@@ -70,7 +68,7 @@ const onBoarding = async (req, res) => {
     BusinessSize,
   };
 
-  console.log("Sending data to Power Automate:", data);
+  console.log("📤 sending onboarding request....");
 
   // return
 

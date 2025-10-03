@@ -62,7 +62,7 @@ const BookConsultation = async (req, res) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
         // Include x-api-key if the flow still checks it
-        "x-api-key": FLOW_SECRET.toLowerCase(),
+        "x-api-key": ConsultationFlowSecret.toLowerCase(),
       },
     });
 

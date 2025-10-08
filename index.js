@@ -30,6 +30,8 @@ const consultationroute = require("./routes/consultationRoutes");
 const partnerroute = require("./routes/partnerRoutes");
 const enquiryroute = require("./routes/EnquiryRoutes");
 const loanroute = require("./routes/LoanRoutes");
+const collateralroute = require("./routes/collateralRoutes");
+const trainingroute = require("./routes/trainingRoutes");
 
 // api endpoints
 app.use("/api/v1/auth", authroute);
@@ -37,3 +39,5 @@ app.use("/api/v1/consultation", consultationroute);
 app.use("/api/v1/partner", partnerroute);
 app.use("/api/v1/enquiry", enquiryroute);
 app.use("/api/v1/loan", loanroute);
+app.use("/api/v1/collateral", collateralroute);
+app.use("/api/v1/training", trainingroute);

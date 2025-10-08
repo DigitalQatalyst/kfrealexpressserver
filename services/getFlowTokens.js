@@ -16,13 +16,13 @@ export async function getAccessToken() {
     client_secret: AZURE_AD.clientSecret,
     scope: AZURE_AD.scope,
   });
-  console.log("🔑 retrieving token...");
+  console.log("⏳retrieving token...");
 
   try {
     const response = await axios.post(tokenUrl, params, {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
-    console.log("token supplied 🔑");
+    console.log("token supplied 🚀✔️🔑");
     return response.data.access_token;
   } catch (error) {
     throw new Error(

@@ -63,6 +63,7 @@ const CreateSupportRequest = async (req, res) => {
 
   // Add flow_secret to the body (if required by the flow)
   data.flow_secret = SupportFlowSecret;
+  console.log("lower", SupportFlowSecret.toLowerCase());
 
   //   console.log('Sending data to Power Automate:', data);
 

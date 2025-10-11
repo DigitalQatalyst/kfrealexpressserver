@@ -14,13 +14,64 @@ const ConsultationFlowSecret = process.env.consultation_flow_secret;
 const BookConsultation = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
 
-  const { Name, Nameofpersonmakingthesubmission, EmailAddress1 } = req.body; // Expect these fields to be passed in the body
+  const {
+    Name,
+    Nameofpersonmakingthesubmission,
+    EmailAddress1,
+    MobileNumber,
+    Position,
+    Companyname,
+    Compannynumber,
+    ConsultationType,
+    ConsultationName,
+    Isthisanexistingbusiness,
+    Doyouownthebusiness,
+    Doyouworkinthisbusiness,
+    Pleaseselect3advicesyouwouldliketoreceive,
+    OtherAdvices,
+  } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
-  if (!Name || !Nameofpersonmakingthesubmission || !EmailAddress1) {
+  if (
+    !Name ||
+    !Nameofpersonmakingthesubmission ||
+    !EmailAddress1 ||
+    !MobileNumber ||
+    !Position ||
+    !Companyname ||
+    !Compannynumber ||
+    !ConsultationType ||
+    !ConsultationName ||
+    !Isthisanexistingbusiness ||
+    !Doyouownthebusiness ||
+    !Doyouworkinthisbusiness ||
+    !Pleaseselect3advicesyouwouldliketoreceive ||
+    !OtherAdvices
+  ) {
     return res.status(400).json({
-      error:
-        "Missing required fields: Name, Nameofpersonmakingthesubmission, EmailAddress1",
+      // error: "Missing required fields",
+      // log the missing exact missing fields
+      error: "Missing required fields",
+      missingFields: [
+        !Name ? "Name" : "",
+        !Nameofpersonmakingthesubmission
+          ? "Nameofpersonmakingthesubmission"
+          : "",
+        !EmailAddress1 ? "EmailAddress1" : "",
+        !MobileNumber ? "MobileNumber" : "",
+        !Position ? "Position" : "",
+        !Companyname ? "Companyname" : "",
+        !Compannynumber ? "Compannynumber" : "",
+        !ConsultationType ? "ConsultationType" : "",
+        !ConsultationName ? "ConsultationName" : "",
+        !Isthisanexistingbusiness ? "Isthisanexistingbusiness" : "",
+        !Doyouownthebusiness ? "Doyouownthebusiness" : "",
+        !Doyouworkinthisbusiness ? "Doyouworkinthisbusiness" : "",
+        !Pleaseselect3advicesyouwouldliketoreceive
+          ? "Pleaseselect3advicesyouwouldliketoreceive"
+          : "",
+        !OtherAdvices ? "OtherAdvices" : "",
+      ],
     });
   }
 
@@ -29,9 +80,20 @@ const BookConsultation = async (req, res) => {
     Name,
     Nameofpersonmakingthesubmission,
     EmailAddress1,
+    MobileNumber,
+    Position,
+    Companyname,
+    Compannynumber,
+    ConsultationType,
+    ConsultationName,
+    Isthisanexistingbusiness,
+    Doyouownthebusiness,
+    Doyouworkinthisbusiness,
+    Pleaseselect3advicesyouwouldliketoreceive,
+    OtherAdvices,
   };
 
-  console.log("Sending data to Power Automate:", data);
+  console.log("Sending consultation data to Power Automate:", data);
 
   //   console.log("data",data)
   //   console.log("my token",data.token)

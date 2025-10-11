@@ -3,20 +3,36 @@ const axios = require("axios");
 const { getAccessToken } = require("../services/getFlowTokens");
 
 // Power Automate flow endpoint
-const FLOW_URL = process.env.contactus_flow_url;
+const FLOW_URL = process.env.disburse_loan_url;
 
 // Flow secret (if still required by the flow)
-const ContactFlowSecret = process.env.contactus_flow_secret;
+const DisburseLoanFlowSecret = process.env.disburse_loan_secret;
 
-// log secret
-
-const CreateContact = async (req, res) => {
+const DisburseLoan = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
-
-  const { name, email, message } = req.body; // Expect these fields to be passed in the body
+  console.log("📤 sending loan disburse request....");
+  const {
+    Name,
+    Nameofpersonmakingthesubmission,
+    EmailAddress,
+    Contacttelephonenumber,
+    Position,
+    Companyname,
+    Companynumber,
+    FundingRequestNumber,
+    AmountinAED,
+    PaymentMethod,
+    Other,
+    ValidSupplierTradeLicence,
+    OfficialQuotations,
+    Invoices,
+    DeliveryNotes,
+    PaymentReceipts,
+    MOHREEmployeelist,
+  } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
-  if (!name || !email || !message) {
+  if (!Name) {
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -24,12 +40,26 @@ const CreateContact = async (req, res) => {
 
   // Construct the data object to be sent to Power Automate
   const data = {
-    name,
-    email,
-    message,
+    Name,
+    Nameofpersonmakingthesubmission,
+    EmailAddress,
+    Contacttelephonenumber,
+    Position,
+    Companyname,
+    Companynumber,
+    FundingRequestNumber,
+    AmountinAED,
+    PaymentMethod,
+    Other,
+    ValidSupplierTradeLicence,
+    OfficialQuotations,
+    Invoices,
+    DeliveryNotes,
+    PaymentReceipts,
+    MOHREEmployeelist,
   };
 
-  console.log("📤 sending contact request....", data);
+  console.log("Sending loan disburse data to Power Automate:", data);
 
   //   console.log("data",data)
   //   console.log("my token",data.token)
@@ -43,8 +73,7 @@ const CreateContact = async (req, res) => {
   }
 
   // Add flow_secret to the body (if required by the flow)
-  data.flow_secret = ContactFlowSecret;
-  // console.log("lower", ContactFlowSecret.toLowerCase());
+  data.flow_secret = DisburseLoanFlowSecret;
 
   //   console.log('Sending data to Power Automate:', data);
 
@@ -60,13 +89,13 @@ const CreateContact = async (req, res) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
         // Include x-api-key if the flow still checks it
-        "x-api-key": ContactFlowSecret,
+        "x-api-key": DisburseLoanFlowSecret,
       },
     });
 
     // Handle successful response
     res.status(200).json({
-      message: "Contact Data successfully sent to Power Automate flow",
+      message: "Loan disburse Data successfully sent to Power Automate flow",
       result: response.data,
     });
   } catch (error) {
@@ -82,5 +111,5 @@ const CreateContact = async (req, res) => {
 };
 
 module.exports = {
-  CreateContact,
+  DisburseLoan,
 };

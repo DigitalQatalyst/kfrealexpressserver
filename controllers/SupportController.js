@@ -7,7 +7,6 @@ const FLOW_URL = process.env.support_url;
 
 // Flow secret (if still required by the flow)
 const SupportFlowSecret = process.env.support_secret;
-console.log("sec", SupportFlowSecret);
 
 const CreateSupportRequest = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
@@ -63,7 +62,6 @@ const CreateSupportRequest = async (req, res) => {
 
   // Add flow_secret to the body (if required by the flow)
   data.flow_secret = SupportFlowSecret;
-  console.log("lower", SupportFlowSecret.toLowerCase());
 
   //   console.log('Sending data to Power Automate:', data);
 

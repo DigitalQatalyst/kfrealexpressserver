@@ -26,7 +26,7 @@ const CreateTraining = async (req, res) => {
     !Contacttelephonenumber
   ) {
     return res.status(400).json({
-      error: "Missing required fields: Name, Email, or ServiceCategory",
+      error: "Missing required fields",
     });
   }
 

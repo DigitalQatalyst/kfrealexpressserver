@@ -16,6 +16,16 @@ const RequestFunding = async (req, res) => {
     Nameofpersonmakingthesubmission,
     EmailAddress,
     Contacttelephonenumber,
+    Companyname,
+    Companynumber,
+    Position,
+    Pleaseselectthefundingprogramyouwanttoappl,
+    ProjectName,
+    CurrentInvestment,
+    LoanAmount,
+    EntrepreneursMinContribution,
+    ValidTradeLicenseoftheEnterprise,
+    EntrepreneursScoredReportfromAlEtihadCredit,
   } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
@@ -23,7 +33,17 @@ const RequestFunding = async (req, res) => {
     !Name ||
     !Nameofpersonmakingthesubmission ||
     !EmailAddress ||
-    !Contacttelephonenumber
+    !Contacttelephonenumber ||
+    !Companyname ||
+    !Companynumber ||
+    !Position ||
+    !Pleaseselectthefundingprogramyouwanttoappl ||
+    !ProjectName ||
+    !CurrentInvestment ||
+    !LoanAmount ||
+    !EntrepreneursMinContribution ||
+    !ValidTradeLicenseoftheEnterprise ||
+    !EntrepreneursScoredReportfromAlEtihadCredit
   ) {
     return res.status(400).json({
       error: "Missing required fields",
@@ -36,6 +56,16 @@ const RequestFunding = async (req, res) => {
     Nameofpersonmakingthesubmission,
     EmailAddress,
     Contacttelephonenumber,
+    Companyname,
+    Companynumber,
+    Position,
+    Pleaseselectthefundingprogramyouwanttoappl,
+    ProjectName,
+    CurrentInvestment,
+    LoanAmount,
+    EntrepreneursMinContribution,
+    ValidTradeLicenseoftheEnterprise,
+    EntrepreneursScoredReportfromAlEtihadCredit,
   };
 
   console.log("Sending funding request data to Power Automate:", data);

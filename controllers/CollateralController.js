@@ -16,6 +16,12 @@ const CreateCollateralUserGuide = async (req, res) => {
     Nameofpersonmakingthesubmission,
     EmailAddress,
     Contacttelephonenumber,
+    Companyname,
+    Companynumber,
+    Position,
+    AssetName,
+    AssetNumber,
+    AdditionalDetails,
   } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
@@ -23,10 +29,16 @@ const CreateCollateralUserGuide = async (req, res) => {
     !Name ||
     !Nameofpersonmakingthesubmission ||
     !EmailAddress ||
-    !Contacttelephonenumber
+    !Contacttelephonenumber ||
+    !Companyname ||
+    !Companynumber ||
+    !Position ||
+    !AssetName ||
+    !AssetNumber ||
+    !AdditionalDetails
   ) {
     return res.status(400).json({
-      error: "Missing required fields: Name, Email, or ServiceCategory",
+      error: "Missing required fields",
     });
   }
 
@@ -36,6 +48,12 @@ const CreateCollateralUserGuide = async (req, res) => {
     Nameofpersonmakingthesubmission,
     EmailAddress,
     Contacttelephonenumber,
+    Companyname,
+    Companynumber,
+    Position,
+    AssetName,
+    AssetNumber,
+    AdditionalDetails,
   };
 
   console.log("Sending collateral user guide data to Power Automate:", data);

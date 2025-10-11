@@ -36,6 +36,7 @@ const contactroute = require("./routes/contactRoutes");
 const supportroute = require("./routes/supportRoutes");
 const fundingroute = require("./routes/fundingRoutes");
 const membershiproute = require("./routes/membershipRoutes");
+const entrepreneurshiproute = require("./routes/entrepreneurshipRoutes");
 
 // api endpoints
 app.use("/api/v1/auth", authroute);
@@ -49,3 +50,4 @@ app.use("/api/v1/contact", contactroute);
 app.use("/api/v1/support", supportroute);
 app.use("/api/v1/funding", fundingroute);
 app.use("/api/v1/membership", membershiproute);
+app.use("/api/v1/entrepreneurship", entrepreneurshiproute);

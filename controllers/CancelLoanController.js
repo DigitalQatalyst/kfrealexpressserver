@@ -16,6 +16,11 @@ const CancelLoan = async (req, res) => {
     Nameofpersonmakingthesubmission,
     EmailAddress,
     Contacttelephonenumber,
+    Companyname,
+    Companynumber,
+    Position,
+    FundingRequestNumber,
+    CancellationDetails,
   } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
@@ -23,11 +28,15 @@ const CancelLoan = async (req, res) => {
     !Name ||
     !Nameofpersonmakingthesubmission ||
     !EmailAddress ||
-    !Contacttelephonenumber
+    !Contacttelephonenumber ||
+    !Companyname ||
+    !Companynumber ||
+    !Position ||
+    !FundingRequestNumber ||
+    !CancellationDetails
   ) {
     return res.status(400).json({
-      error:
-        "Missing required fields: Name, Nameofpersonmakingthesubmission, EmailAddress, or Contacttelephonenumber",
+      error: "Missing required fields",
     });
   }
 
@@ -37,6 +46,11 @@ const CancelLoan = async (req, res) => {
     Nameofpersonmakingthesubmission,
     EmailAddress,
     Contacttelephonenumber,
+    Companyname,
+    Companynumber,
+    Position,
+    FundingRequestNumber,
+    CancellationDetails,
   };
 
   console.log("Sending loan cancellation data to Power Automate:", data);

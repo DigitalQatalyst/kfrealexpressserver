@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken } = require("../services/getFlowTokens");
+const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint
 const FLOW_URL = process.env.onboarding_flow_url;
@@ -8,9 +9,9 @@ const FLOW_SECRET = process.env.flow_secret;
 
 const onBoarding = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
-
+  const uuid = await generateUUID();
+  // return;
   const {
-    formId,
     userId,
     companyName,
     industry,
@@ -34,6 +35,7 @@ const onBoarding = async (req, res) => {
     registrationNumber,
     establishmentDate,
     businessSize,
+    businessType,
   } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
@@ -46,7 +48,7 @@ const onBoarding = async (req, res) => {
 
   // Construct the data object to be sent to Power Automate
   const data = {
-    formId,
+    formId: uuid,
     userId,
     companyName,
     industry,
@@ -107,6 +109,7 @@ const onBoarding = async (req, res) => {
         "x-api-key": FLOW_SECRET.toLowerCase(),
       },
     });
+    console.log("onboarding data has been submitted successfully");
 
     // Handle successful response
     res.status(200).json({

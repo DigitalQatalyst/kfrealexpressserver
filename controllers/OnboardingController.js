@@ -10,32 +10,34 @@ const onBoarding = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
 
   const {
-    CompanyName,
-    Industry,
-    CompanyStage,
-    ContactName,
-    Email,
-    Phone,
-    InitialCapitalUSD,
-    FundingNeedsUSD,
-    BusinessRequirements,
-    BusinessNeeds,
-    EmployeeCount,
-    Founders,
-    FoundingYear,
-    Address,
-    City,
-    Country,
-    Website,
-    BusinessPitch,
-    ProblemStatement,
-    RegistrationNumber,
-    EstablishmentDate,
-    BusinessSize,
+    formId,
+    userId,
+    companyName,
+    industry,
+    companyStage,
+    contactName,
+    email,
+    phone,
+    initialCapitalUSD,
+    fundingNeedsUSD,
+    businessRequirements,
+    businessNeeds,
+    employeeCount,
+    founders,
+    foundingYear,
+    address,
+    city,
+    country,
+    website,
+    businessPitch,
+    problemStatement,
+    registrationNumber,
+    establishmentDate,
+    businessSize,
   } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
-  if (!Email || !CompanyName || !Industry || !ContactName) {
+  if (!email || !companyName || !industry || !contactName) {
     return res.status(400).json({
       error:
         "Missing required fields: Email, CompanyName, Industry, or ContactName",
@@ -44,28 +46,30 @@ const onBoarding = async (req, res) => {
 
   // Construct the data object to be sent to Power Automate
   const data = {
-    CompanyName,
-    Industry,
-    CompanyStage,
-    ContactName,
-    Email,
-    Phone,
-    InitialCapitalUSD: Number(InitialCapitalUSD), // Convert to number
-    FundingNeedsUSD: Number(FundingNeedsUSD), // Convert to number
-    BusinessRequirements,
-    BusinessNeeds,
-    EmployeeCount: Number(EmployeeCount), // Convert to number
-    Founders,
-    FoundingYear: new Date(FoundingYear).toISOString().split("T")[0], // Convert to YYYY-MM-DD format
-    Address,
-    City,
-    Country,
-    Website,
-    BusinessPitch,
-    ProblemStatement,
-    RegistrationNumber,
-    EstablishmentDate: new Date(EstablishmentDate).toISOString().split("T")[0], // Convert to YYYY-MM-DD format
-    BusinessSize,
+    formId,
+    userId,
+    companyName,
+    industry,
+    companyStage,
+    contactName,
+    email,
+    phone,
+    initialCapitalUSD: Number(initialCapitalUSD), // Convert to number
+    fundingNeedsUSD: Number(fundingNeedsUSD), // Convert to number
+    businessRequirements,
+    businessNeeds,
+    employeeCount: Number(employeeCount), // Convert to number
+    founders,
+    foundingYear: new Date(foundingYear).toISOString().split("T")[0], // Convert to YYYY-MM-DD format
+    address,
+    city,
+    country,
+    website,
+    businessPitch,
+    problemStatement,
+    registrationNumber,
+    establishmentDate: new Date(establishmentDate).toISOString().split("T")[0], // Convert to YYYY-MM-DD format
+    businessSize,
   };
 
   console.log("📤 sending onboarding request....");

@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export function generateUUID() {
   const newUUID = uuidv4();
-  //   console.log("Generated UUID:", newUUID);
+  console.log("Generated UUID:", newUUID);
   return newUUID;
 }
 

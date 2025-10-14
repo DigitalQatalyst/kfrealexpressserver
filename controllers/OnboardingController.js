@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken } = require("../services/getFlowTokens");
-const { generateUUID } = require("../services/generateUuid");
+// const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint
 const FLOW_URL = process.env.onboarding_flow_url;
@@ -9,7 +9,7 @@ const FLOW_SECRET = process.env.flow_secret;
 
 const onBoarding = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
-  const uuid = await generateUUID();
+  // const uuid = await generateUUID();
   // return;
   const {
     userId,
@@ -48,7 +48,7 @@ const onBoarding = async (req, res) => {
 
   // Construct the data object to be sent to Power Automate
   const data = {
-    formId: uuid,
+    formId,
     userId,
     companyName,
     industry,

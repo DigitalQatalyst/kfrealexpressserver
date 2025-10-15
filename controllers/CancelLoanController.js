@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken } = require("../services/getFlowTokens");
+const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint
 const FLOW_URL = process.env.cancel_loan_url;
@@ -9,30 +10,40 @@ const CancelLoanFlowSecret = process.env.cancel_loan_secret;
 const CancelLoan = async (req, res) => {
   console.log("📤 sending loan cancel request....");
 
+  const formid = await generateUUID();
+
+  // Expect these fields to be passed in the body
   const {
-    Name,
-    Nameofpersonmakingthesubmission,
-    EmailAddress,
-    Contacttelephonenumber,
-    Companyname,
-    Companynumber,
-    Position,
-    FundingRequestNumber,
-    CancellationDetails,
-  } = req.body; // Expect these fields to be passed in the body
+    azureId,
+    sequenceNumber,
+    name,
+    submittedBy,
+    emailAddress,
+    telephoneNumber,
+    companyName,
+    companyNumber,
+    position,
+    fundingNumber,
+    cancellationDetails,
+    consentAcknowledgement,
+  } = req.body;
 
   // Validate required fields
   if (
-    !Name ||
-    !Nameofpersonmakingthesubmission ||
-    !EmailAddress ||
-    !Contacttelephonenumber ||
-    !Companyname ||
-    !Companynumber ||
-    !Position ||
-    !FundingRequestNumber ||
-    !CancellationDetails
+    !azureId ||
+    !sequenceNumber ||
+    !name ||
+    !submittedBy ||
+    !emailAddress ||
+    !telephoneNumber ||
+    !companyName ||
+    !companyNumber ||
+    !position ||
+    !fundingNumber ||
+    !cancellationDetails ||
+    !consentAcknowledgement
   ) {
+    console.log("Missing required fields");
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -40,15 +51,19 @@ const CancelLoan = async (req, res) => {
 
   // Construct payload for Power Automate
   const data = {
-    Name,
-    Nameofpersonmakingthesubmission,
-    EmailAddress,
-    Contacttelephonenumber,
-    Companyname,
-    Companynumber,
-    Position,
-    FundingRequestNumber,
-    CancellationDetails,
+    azureId,
+    formId: formid,
+    sequenceNumber: Number(sequenceNumber),
+    name,
+    submittedBy,
+    emailAddress,
+    telephoneNumber: Number(telephoneNumber),
+    companyName,
+    companyNumber,
+    position,
+    fundingNumber,
+    cancellationDetails,
+    consentAcknowledgement,
   };
 
   console.log("Sending loan cancellation data to Power Automate:", data);

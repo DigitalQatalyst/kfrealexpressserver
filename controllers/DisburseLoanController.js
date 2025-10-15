@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken } = require("../services/getFlowTokens");
+const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint
 const FLOW_URL = process.env.disburse_loan_url;
@@ -12,24 +13,28 @@ const DisburseLoan = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
   console.log("📤 sending loan disburse request....");
   const {
+    UserId,
     Name,
-    Nameofpersonmakingthesubmission,
+    SubmittedBy,
     EmailAddress,
-    Contacttelephonenumber,
+    TelephoneNumber,
     Position,
-    Companyname,
-    Companynumber,
-    FundingRequestNumber,
-    AmountinAED,
+    CompanyName,
+    CompanyNumber,
+    FundingNumber,
+    AmountInAED,
     PaymentMethod,
-    Other,
-    ValidSupplierTradeLicence,
+    OtherOptional,
+    SupplierLicense,
     OfficialQuotations,
     Invoices,
     DeliveryNotes,
     PaymentReceipts,
-    MOHREEmployeelist,
-  } = req.body; // Expect these fields to be passed in the body
+    EmployeeList,
+    ConsentAcknowledgement,
+    SequenceNumber,
+  } = req.body;
+  // Expect these fields to be passed in the body
 
   // Validate input
   if (!Name) {
@@ -37,26 +42,31 @@ const DisburseLoan = async (req, res) => {
       error: "Missing required fields",
     });
   }
+  const formid = await generateUUID();
 
   // Construct the data object to be sent to Power Automate
   const data = {
+    FormId: formid,
+    UserId,
     Name,
-    Nameofpersonmakingthesubmission,
+    SubmittedBy,
     EmailAddress,
-    Contacttelephonenumber,
+    TelephoneNumber,
     Position,
-    Companyname,
-    Companynumber,
-    FundingRequestNumber,
-    AmountinAED,
+    CompanyName,
+    CompanyNumber,
+    FundingNumber,
+    AmountInAED: Number(AmountInAED),
     PaymentMethod,
-    Other,
-    ValidSupplierTradeLicence,
+    OtherOptional,
+    SupplierLicense,
     OfficialQuotations,
     Invoices,
     DeliveryNotes,
     PaymentReceipts,
-    MOHREEmployeelist,
+    EmployeeList,
+    ConsentAcknowledgement,
+    SequenceNumber,
   };
 
   console.log("Sending loan disburse data to Power Automate:", data);

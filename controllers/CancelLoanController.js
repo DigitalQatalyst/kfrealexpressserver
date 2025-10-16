@@ -32,24 +32,33 @@ const CancelLoan = async (req, res) => {
     consentAcknowledgement,
   } = req.body;
 
-  // Validate required fields
-  if (
-    !azureId ||
-    !sequenceNumber ||
-    !name ||
-    !submittedBy ||
-    !emailAddress ||
-    !telephoneNumber ||
-    !companyName ||
-    !companyNumber ||
-    !position ||
-    !fundingNumber ||
-    !cancellationDetails ||
-    !consentAcknowledgement
-  ) {
-    console.log("Missing required fields");
+  // Create an array of required fields and their corresponding values
+  const requiredFields = {
+    azureId,
+    sequenceNumber,
+    name,
+    submittedBy,
+    emailAddress,
+    telephoneNumber,
+    companyName,
+    companyNumber,
+    position,
+    fundingNumber,
+    cancellationDetails,
+    consentAcknowledgement,
+  };
+
+  // Find missing fields
+  const missingFields = Object.keys(requiredFields).filter(
+    (field) => !requiredFields[field]
+  );
+
+  // If any fields are missing, log them and return an error response
+  if (missingFields.length > 0) {
+    console.log(`Missing required fields: ${missingFields.join(", ")}`);
     return res.status(400).json({
       error: "Missing required fields",
+      missingFields: missingFields, // Include the missing fields in the response
     });
   }
 

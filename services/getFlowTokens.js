@@ -1,4 +1,4 @@
-import axios from "axios";
+const axios = require("axios");
 
 const AZURE_AD = {
   tenantId: process.env.tenant_id, // e.g., '12345678-1234-1234-1234-1234567890ab'
@@ -8,7 +8,7 @@ const AZURE_AD = {
   scope: process.env.flow_scope,
 };
 
-export async function getAccessToken() {
+const getAccessToken = async () => {
   const tokenUrl = `https://login.microsoftonline.com/${AZURE_AD.tenantId}/oauth2/v2.0/token`;
   const params = new URLSearchParams({
     grant_type: "client_credentials",
@@ -31,3 +31,5 @@ export async function getAccessToken() {
     );
   }
 }
+
+module.exports = { getAccessToken };

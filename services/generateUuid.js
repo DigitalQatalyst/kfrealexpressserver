@@ -1,20 +1,11 @@
-// import { v4 as uuidv4 } from "uuid";
+const { randomUUID } = require("crypto");  // Use `require` for CommonJS
 
-import { randomUUID } from "crypto";
-
-// export function generateUUID() {
-//   const newUUID = uuidv4();
-//   console.log("Generated UUID:", newUUID);
-//   return newUUID;
-// }
-
-// // Call the function to generate a UUID
-// // generateUUID();
-
-export function generateUUID() {
-  const newUUID = randomUUID();
+// Function to generate a UUID
+const generateUUID = async () => {
+  const newUUID = randomUUID();  // No need for `await` since `randomUUID` isn't a promise
   console.log("Generated UUID:", newUUID);
   return newUUID;
-}
+};
 
-// generateUUID();
+// Export the function
+module.exports = { generateUUID };

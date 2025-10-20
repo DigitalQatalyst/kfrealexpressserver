@@ -37,9 +37,11 @@ const supportroute = require("./routes/supportRoutes");
 const fundingroute = require("./routes/fundingRoutes");
 const membershiproute = require("./routes/membershipRoutes");
 const entrepreneurshiproute = require("./routes/entrepreneurshipRoutes");
+const identityroute = require("./routes/identityRoutes");
 
 // api endpoints
 app.use("/api/v1/auth", authroute);
+app.use("/api/v1/identity", identityroute);
 app.use("/api/v1/consultation", consultationroute);
 app.use("/api/v1/partner", partnerroute);
 app.use("/api/v1/enquiry", enquiryroute);
@@ -51,3 +53,8 @@ app.use("/api/v1/support", supportroute);
 app.use("/api/v1/funding", fundingroute);
 app.use("/api/v1/membership", membershiproute);
 app.use("/api/v1/entrepreneurship", entrepreneurshiproute);
+
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK", message: "Server is running" });
+});

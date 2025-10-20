@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken } = require("../services/getFlowTokens");
+const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint
 const FLOW_URL = process.env.requestfunding_url;
@@ -12,60 +13,69 @@ const RequestFunding = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
   console.log("📤 sending funding request cancel request....");
   const {
-    Name,
-    Nameofpersonmakingthesubmission,
-    EmailAddress,
-    Contacttelephonenumber,
-    Companyname,
-    Companynumber,
-    Position,
-    Pleaseselectthefundingprogramyouwanttoappl,
-    ProjectName,
-    CurrentInvestment,
-    LoanAmount,
-    EntrepreneursMinContribution,
-    ValidTradeLicenseoftheEnterprise,
-    EntrepreneursScoredReportfromAlEtihadCredit,
+    azureId,
+    name,
+    submittedBy,
+    emailAddress,
+    telephoneNumber,
+    companyName,
+    companyNumber,
+    position,
+    fundingProgram,
+    projectName,
+    currentInvestment,
+    loanAmount,
+    minContribution,
+    TradeLicence,
+    scoredReport,
+    consentAcknowledgement,
   } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
   if (
-    !Name ||
-    !Nameofpersonmakingthesubmission ||
-    !EmailAddress ||
-    !Contacttelephonenumber ||
-    !Companyname ||
-    !Companynumber ||
-    !Position ||
-    !Pleaseselectthefundingprogramyouwanttoappl ||
-    !ProjectName ||
-    !CurrentInvestment ||
-    !LoanAmount ||
-    !EntrepreneursMinContribution ||
-    !ValidTradeLicenseoftheEnterprise ||
-    !EntrepreneursScoredReportfromAlEtihadCredit
+    !azureId ||
+    !name ||
+    !submittedBy ||
+    !emailAddress ||
+    !telephoneNumber ||
+    !companyName ||
+    !companyNumber ||
+    !position ||
+    !fundingProgram ||
+    !projectName ||
+    !currentInvestment ||
+    !loanAmount ||
+    !minContribution ||
+    !TradeLicence ||
+    !scoredReport ||
+    !consentAcknowledgement
   ) {
     return res.status(400).json({
       error: "Missing required fields",
     });
   }
 
+  const formid = await generateUUID();
+
   // Construct the data object to be sent to Power Automate
   const data = {
-    Name,
-    Nameofpersonmakingthesubmission,
-    EmailAddress,
-    Contacttelephonenumber,
-    Companyname,
-    Companynumber,
-    Position,
-    Pleaseselectthefundingprogramyouwanttoappl,
-    ProjectName,
-    CurrentInvestment,
-    LoanAmount,
-    EntrepreneursMinContribution,
-    ValidTradeLicenseoftheEnterprise,
-    EntrepreneursScoredReportfromAlEtihadCredit,
+    azureId,
+    formId: formid,
+    name,
+    submittedBy,
+    emailAddress,
+    telephoneNumber,
+    companyName,
+    companyNumber,
+    position,
+    fundingProgram,
+    projectName,
+    currentInvestment: Number(currentInvestment),
+    loanAmount: Number(loanAmount),
+    minContribution: Number(minContribution),
+    TradeLicence,
+    scoredReport,
+    consentAcknowledgement,
   };
 
   console.log("Sending funding request data to Power Automate:", data);

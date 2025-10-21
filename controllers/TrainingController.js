@@ -11,20 +11,10 @@ const TrainingFlowSecret = process.env.training_secret;
 const CreateTraining = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
   console.log("📤 sending training request....");
-  const {
-    Name,
-    Nameofpersonmakingthesubmission,
-    EmailAddress,
-    Contacttelephonenumber,
-  } = req.body; // Expect these fields to be passed in the body
+  const { Name, submittedBy, emailAddress, telephoneNumber } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
-  if (
-    !Name ||
-    !Nameofpersonmakingthesubmission ||
-    !EmailAddress ||
-    !Contacttelephonenumber
-  ) {
+  if (!Name || !submittedBy || !emailAddress || !telephoneNumber) {
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -33,9 +23,9 @@ const CreateTraining = async (req, res) => {
   // Construct the data object to be sent to Power Automate
   const data = {
     Name,
-    Nameofpersonmakingthesubmission,
-    EmailAddress,
-    Contacttelephonenumber,
+    submittedBy,
+    emailAddress,
+    telephoneNumber,
   };
 
   console.log("Sending training data to Power Automate:", data);

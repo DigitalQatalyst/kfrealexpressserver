@@ -105,6 +105,7 @@ const getAccountProfile = async (req, res) => {
       "Data-Version": "4.0",
       "Data-MaxVersion": "4.0",
     };
+    // test
 
     // Make the GET request using axios
     const response = await axios.get(

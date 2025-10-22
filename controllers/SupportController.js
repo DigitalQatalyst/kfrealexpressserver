@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken } = require("../services/getFlowTokens");
+const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint
 const FLOW_URL = process.env.support_url;
@@ -11,8 +12,15 @@ const SupportFlowSecret = process.env.support_secret;
 const CreateSupportRequest = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
   console.log("📤 sending support request....");
-  const { fullName, emailAddress, subject, category, priority, message } =
-    req.body; // Expect these fields to be passed in the body
+  const {
+    fullName,
+    emailAddress,
+    subject,
+    category,
+    priority,
+    message,
+    userId,
+  } = req.body; // Expect these fields to be passed in the body
   console.log(
     "body",
     fullName,
@@ -38,7 +46,10 @@ const CreateSupportRequest = async (req, res) => {
   // }
 
   // Construct the data object to be sent to Power Automate
+  const fid = await generateUUID();
   const data = {
+    userId,
+    formId: fid,
     fullName,
     emailAddress,
     subject,

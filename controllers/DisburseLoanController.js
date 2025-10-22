@@ -1,6 +1,6 @@
 const express = require("express");
 const axios = require("axios");
-const { getAccessToken } = require("../services/getFlowTokens");
+const { getAccessToken, fetchCRMToken } = require("../services/getFlowTokens");
 const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint
@@ -49,11 +49,11 @@ const DisburseLoan = async (req, res) => {
   const data = {
     FormId: formid,
     azureId,
-    UserId:userId,
-    Name:name,
-    SubmittedBy:submittedBy,
-    EmailAddress:emailAddress,
-    TelephoneNumber:telephoneNumber,
+    UserId: userId,
+    Name: name,
+    SubmittedBy: submittedBy,
+    EmailAddress: emailAddress,
+    TelephoneNumber: telephoneNumber,
     position,
     companyName,
     companyNumber,
@@ -122,6 +122,57 @@ const DisburseLoan = async (req, res) => {
   }
 };
 
+const getDisbursedLoans = async (req, res) => {
+  const token = await fetchCRMToken();
+
+  if (!token) {
+    return res
+      .status(400)
+      .json({ error: "authToken is required in the request body" });
+  }
+
+  try {
+    // Create headers object
+    const headers = {
+      Authorization: `${token}`,
+      Accept: "application/json",
+      "Data-Version": "4.0",
+      "Data-MaxVersion": "4.0",
+    };
+
+    // Make the GET request using axios
+    const response = await axios.get(
+      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=accountid eq \'${accountid}\'`,
+      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_reallocationofloandisbursementforms`,
+      { headers }
+    );
+
+    // console.log("account profile", response.data);
+
+    // Return the response data
+    res.status(200).json(response.data);
+
+    const contact = response?.data?.value[0]?._primarycontactid_value;
+    // console.log('contact', contact);
+
+    return;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        "Error fetching data for reallocated disbursed loans:",
+        error.response?.data || error.message
+      );
+      return res.status(error.response?.status || 500).json({
+        error: error.response?.data || error.message,
+      });
+    } else {
+      console.error("Error fetching data for specific account:", error.message);
+      return res.status(500).json({ error: error.message });
+    }
+  }
+};
+
 module.exports = {
   DisburseLoan,
+  getDisbursedLoans,
 };

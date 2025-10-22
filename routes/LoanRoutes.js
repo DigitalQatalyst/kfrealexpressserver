@@ -3,7 +3,7 @@ const {
   CancelLoan,
   getCancelLoans,
 } = require("../controllers/CancelLoanController");
-const { DisburseLoan } = require("../controllers/DisburseLoanController");
+const { DisburseLoan, getDisbursedLoans } = require("../controllers/DisburseLoanController");
 const {
   getAmendExistingLoan,
 } = require("../controllers/AmendExistingLoanController");
@@ -16,5 +16,6 @@ router.post("/cancel-loan", CancelLoan);
 router.post("/disburse-loan", DisburseLoan);
 router.get("/get-cancel-loans", getCancelLoans);
 router.get("/get-amend-existing-loan", getAmendExistingLoan);
+router.get("/get-disbursed-loans", getDisbursedLoans);
 
 module.exports = router;

@@ -3,6 +3,7 @@ const { BookConsultation } = require("../controllers/ConsultationController");
 const { CreatePartnerShip } = require("../controllers/PartnerController");
 const {
   CreateCollateralUserGuide,
+  getCollateralForms,
 } = require("../controllers/CollateralController");
 
 const router = express.Router();
@@ -10,5 +11,6 @@ const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
 
 router.post("/create-collateraluserguide", CreateCollateralUserGuide);
+router.get("/get-collateral-forms", getCollateralForms);
 
 module.exports = router;

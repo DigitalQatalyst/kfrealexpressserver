@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   CancelLoan,
-  GetCancelLoans,
+  getCancelLoans,
 } = require("../controllers/CancelLoanController");
 const { DisburseLoan } = require("../controllers/DisburseLoanController");
 
@@ -11,6 +11,6 @@ router.use(express.urlencoded({ extended: true }));
 
 router.post("/cancel-loan", CancelLoan);
 router.post("/disburse-loan", DisburseLoan);
-router.post("/get-cancel-loans", GetCancelLoans);
+router.get("/get-cancel-loans", getCancelLoans);
 
 module.exports = router;

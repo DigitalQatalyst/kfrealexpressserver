@@ -1,6 +1,6 @@
 const express = require("express");
 const axios = require("axios");
-const { getAccessToken } = require("../services/getFlowTokens");
+const { getAccessToken, fetchCRMToken } = require("../services/getFlowTokens");
 const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint
@@ -108,26 +108,62 @@ const CancelLoan = async (req, res) => {
     });
   }
 };
-// export
-const GetCancelLoans = async (req, res) => {
-  console.log("📤 sending loan cancel request....");
+
+const getCancelLoans = async (req, res) => {
+  const token = await fetchCRMToken();
+  const { accountid } = req.body;
+
+  // log
+  // console.log("req body",token,accountid)
+  // return
+
+  if (!token) {
+    return res
+      .status(400)
+      .json({ error: "authToken is required in the request body" });
+  }
 
   try {
-    const response = await axios.get(url);
-    const data = response.data;
+    // Create headers object
+    const headers = {
+      Authorization: `${token}`,
+      Accept: "application/json",
+      "Data-Version": "4.0",
+      "Data-MaxVersion": "4.0",
+    };
 
-    if (data) {
-      return res.status(200).json("success", data);
-    }
+    // Make the GET request using axios
+    const response = await axios.get(
+      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=accountid eq \'${accountid}\'`,
+      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_cancelloanforms`,
+      { headers }
+    );
+
+    // console.log("account profile", response.data);
+
+    // Return the response data
+    res.status(200).json(response.data);
+
+    const contact = response?.data?.value[0]?._primarycontactid_value;
+    // console.log('contact', contact);
+
+    return;
   } catch (error) {
-    console.log("error getting cancelled loans", error);
-    return res.status(500).json({
-      error: "Failed to get cancelled loans",
-      details: error.response ? error.response.data : error.message,
-    });
+    if (axios.isAxiosError(error)) {
+      console.error(
+        "Error fetching data for specific account:",
+        error.response?.data || error.message
+      );
+      return res.status(error.response?.status || 500).json({
+        error: error.response?.data || error.message,
+      });
+    } else {
+      console.error("Error fetching data for specific account:", error.message);
+      return res.status(500).json({ error: error.message });
+    }
   }
 };
 module.exports = {
   CancelLoan,
-  GetCancelLoans,
+  getCancelLoans,
 };

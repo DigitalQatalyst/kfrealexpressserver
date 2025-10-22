@@ -4,6 +4,7 @@ const {
   getAccountProfile,
   getContactInformation,
   crmSignUp,
+  getUserProfile,
 } = require("../controllers/AuthController");
 const { onBoarding } = require("../controllers/OnboardingController");
 const { CreateAccount } = require("../controllers/SignUpController");
@@ -18,4 +19,5 @@ router.post("/get-contact-info", getContactInformation);
 router.post("/onboarding", onBoarding);
 router.post("/create-account", CreateAccount);
 router.post("/signup", crmSignUp);
+router.post("/get-user-profile", getUserProfile);
 module.exports = router;

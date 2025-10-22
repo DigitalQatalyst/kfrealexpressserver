@@ -85,7 +85,7 @@ const getToken = async (req, res) => {
 const getAccountProfile = async (req, res) => {
   const token = await fetchToken();
   console.log("crm token", token);
-  const { accountid } = req.body;
+  const { azureid } = req.body;
 
   // log
   // console.log("req body",token,accountid)
@@ -108,7 +108,9 @@ const getAccountProfile = async (req, res) => {
 
     // Make the GET request using axios
     const response = await axios.get(
-      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=accountid eq \'${accountid}\'`,
+      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=kf_azureid eq \'${azureid}\'`,
+      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=kf_azureid eq \'${azureid}\'`,
+      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=accountid eq \'${accountid}\'`,
 
       { headers }
     );
@@ -138,10 +140,9 @@ const getAccountProfile = async (req, res) => {
   }
 };
 
-
 const getContactInformation = async (req, res) => {
   const token = await fetchToken();
-  const { accountid } = req.body;
+  const { azureid } = req.body;
 
   try {
     // Define headers
@@ -156,7 +157,8 @@ const getContactInformation = async (req, res) => {
     // 30d25250-1632-f011-8c4e-6045bd145efe
     // Make the GET request using axios
     const response = await axios.get(
-      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/contacts(${accountid})`,
+      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/contacts(${accountid})`,
+      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/contacts?$filter=kf_azureid eq \'${azureid}\'`,
       { headers }
     );
 
@@ -266,9 +268,131 @@ const crmSignUp = async (req, res) => {
   }
 };
 
+// get user profile
+/**
+ * GET USER PROFILE (merged Account + Contact)
+ * ------------------------------------------------
+ * Body: { azureid: "<azure-guid>" }
+ * ------------------------------------------------
+ * 1. Fetch Account  → $filter=kf_azureid eq '<azureid>'
+ * 2. Fetch Contact  → $filter=kf_azureid eq '<azureid>'
+ * 3. Combine → account fields + contact fields (contact wins on overlap)
+ * 4. Return a tidy JSON object
+ */
+const getUserProfile = async (req, res) => {
+  const { azureid } = req.body;
+
+  // ------------------------------------------------
+  // 1. Input validation
+  // ------------------------------------------------
+  if (!azureid) {
+    return res
+      .status(400)
+      .json({ error: "azureid is required in the request body" });
+  }
+
+  // ------------------------------------------------
+  // 2. Get a fresh CRM token (pure function)
+  // ------------------------------------------------
+  let token;
+  try {
+    token = await fetchToken(); // <-- your pure token helper
+  } catch (err) {
+    console.error("Token fetch failed:", err);
+    return res.status(500).json({ error: "Failed to obtain CRM token" });
+  }
+
+  // ------------------------------------------------
+  // 3. Common headers for both calls
+  // ------------------------------------------------
+  const headers = {
+    Authorization: token,
+    Accept: "application/json",
+    "OData-Version": "4.0",
+    "OData-MaxVersion": "4.0",
+  };
+
+  // ------------------------------------------------
+  // 4. Build the two OData URLs (both filter on azureid)
+  // ------------------------------------------------
+  const accountUrl = `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=kf_azureid eq '${azureid}'&$select=*&$expand=primarycontactid($select=contactid,firstname,lastname,emailaddress1,telephone1)`;
+  const contactUrl = `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/contacts?$filter=kf_azureid eq '${azureid}'&$select=*`;
+
+  try {
+    console.log("Fetching account & contact for azureid:", azureid);
+
+    // ------------------------------------------------
+    // 5. Parallel requests (faster + less round-trips)
+    // ------------------------------------------------
+    const [accountRes, contactRes] = await Promise.all([
+      axios.get(accountUrl, { headers }).catch(() => ({ data: { value: [] } })),
+      axios.get(contactUrl, { headers }).catch(() => ({ data: { value: [] } })),
+    ]);
+
+    const account = accountRes.data.value[0] || null;
+    const contact = contactRes.data.value[0] || null;
+
+    // ------------------------------------------------
+    // 6. Build merged profile
+    // ------------------------------------------------
+    const profile = {
+      azureid,
+      // ---- Account data (base layer) ----
+      accountId: account?.accountid ?? null,
+      accountName: account?.name ?? null,
+      // add any other account fields you need here
+      ...(account && { ...account }),
+
+      // ---- Contact data (overlay – overwrites same keys) ----
+      ...(contact && {
+        contactId: contact.contactid,
+        firstName: contact.firstname ?? null,
+        lastName: contact.lastname ?? null,
+        email: contact.emailaddress1 ?? null,
+        phone: contact.telephone1 ?? null,
+        // add any other contact fields you need
+        ...contact,
+      }),
+
+      // ---- Metadata ----
+      hasAccount: !!account,
+      hasContact: !!contact,
+      fetchedAt: new Date().toISOString(),
+    };
+
+    // Clean up noisy OData props
+    delete profile["@odata.etag"];
+    delete profile["@odata.type"];
+    delete profile["@odata.context"]; // optional
+
+    console.log("Merged profile ready");
+    return res.status(200).json({
+      success: true,
+      profile,
+      message: "User profile retrieved and merged successfully",
+    });
+  } catch (error) {
+    // ------------------------------------------------
+    // 7. Unified error handling
+    // ------------------------------------------------
+    console.error("User-profile error:", error.response?.data || error.message);
+    if (axios.isAxiosError(error)) {
+      return res.status(error.response?.status || 500).json({
+        error: "Failed to fetch profile data",
+        details: error.response?.data || error.message,
+      });
+    }
+    return res.status(500).json({
+      error: "Internal server error",
+      details: error.message,
+    });
+  }
+};
+
 module.exports = {
   getToken,
   getAccountProfile,
   getContactInformation,
   crmSignUp,
+  getUserProfile,
 };

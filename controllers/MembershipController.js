@@ -1,6 +1,6 @@
 const express = require("express");
 const axios = require("axios");
-const { getAccessToken } = require("../services/getFlowTokens");
+const { getAccessToken, fetchCRMToken } = require("../services/getFlowTokens");
 
 // Power Automate flow endpoint
 const FLOW_URL = process.env.membershiprequest_url;

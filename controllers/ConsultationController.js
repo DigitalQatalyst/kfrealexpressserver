@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken } = require("../services/getFlowTokens");
+const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint
 const FLOW_URL = process.env.consultation_flow_url;
@@ -15,82 +16,85 @@ const BookConsultation = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
 
   const {
-    Name,
-    Nameofpersonmakingthesubmission,
-    EmailAddress1,
-    MobileNumber,
-    Position,
-    Companyname,
-    Compannynumber,
-    ConsultationType,
-    ConsultationName,
-    Isthisanexistingbusiness,
-    Doyouownthebusiness,
-    Doyouworkinthisbusiness,
-    Pleaseselect3advicesyouwouldliketoreceive,
-    OtherAdvices,
+    azureId,
+    name,
+    submittedBy,
+    emailAddress1,
+    mobileNumber,
+    position,
+    companyName,
+    compannyNumber,
+    consultationType,
+    consultationName,
+    existingBusiness,
+    businessOwnership,
+    worksHere,
+    selectedAdvice,
+    otherAdvices,
   } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
   if (
-    !Name ||
-    !Nameofpersonmakingthesubmission ||
-    !EmailAddress1 ||
-    !MobileNumber ||
-    !Position ||
-    !Companyname ||
-    !Compannynumber ||
-    !ConsultationType ||
-    !ConsultationName ||
-    !Isthisanexistingbusiness ||
-    !Doyouownthebusiness ||
-    !Doyouworkinthisbusiness ||
-    !Pleaseselect3advicesyouwouldliketoreceive ||
-    !OtherAdvices
+    !azureId ||
+    !name ||
+    !submittedBy ||
+    !emailAddress1 ||
+    !mobileNumber ||
+    !position ||
+    !companyName ||
+    !compannyNumber ||
+    !consultationType ||
+    !consultationName ||
+    !existingBusiness ||
+    !businessOwnership ||
+    !worksHere ||
+    !selectedAdvice ||
+    !otherAdvices
   ) {
     return res.status(400).json({
       // error: "Missing required fields",
       // log the missing exact missing fields
       error: "Missing required fields",
       missingFields: [
-        !Name ? "Name" : "",
-        !Nameofpersonmakingthesubmission
-          ? "Nameofpersonmakingthesubmission"
-          : "",
-        !EmailAddress1 ? "EmailAddress1" : "",
-        !MobileNumber ? "MobileNumber" : "",
-        !Position ? "Position" : "",
-        !Companyname ? "Companyname" : "",
-        !Compannynumber ? "Compannynumber" : "",
-        !ConsultationType ? "ConsultationType" : "",
-        !ConsultationName ? "ConsultationName" : "",
-        !Isthisanexistingbusiness ? "Isthisanexistingbusiness" : "",
-        !Doyouownthebusiness ? "Doyouownthebusiness" : "",
-        !Doyouworkinthisbusiness ? "Doyouworkinthisbusiness" : "",
-        !Pleaseselect3advicesyouwouldliketoreceive
-          ? "Pleaseselect3advicesyouwouldliketoreceive"
-          : "",
-        !OtherAdvices ? "OtherAdvices" : "",
+        !azureId ? "azureId" : "",
+        !formId ? "formId" : "",
+        !name ? "name" : "",
+        !submittedBy ? "submittedBy" : "",
+        !emailAddress1 ? "emailAddress1" : "",
+        !mobileNumber ? "mobileNumber" : "",
+        !position ? "position" : "",
+        !companyName ? "companyName" : "",
+        !compannyNumber ? "compannyNumber" : "",
+        !consultationType ? "consultationType" : "",
+        !consultationName ? "consultationName" : "",
+        !existingBusiness ? "existingBusiness" : "",
+        !businessOwnership ? "businessOwnership" : "",
+        !worksHere ? "worksHere" : "",
+        !selectedAdvice ? "selectedAdvice" : "",
+        !otherAdvices ? "otherAdvices" : "",
       ],
     });
   }
+  const formid = await generateUUID();
 
   // Construct the data object to be sent to Power Automate
   const data = {
-    Name,
-    Nameofpersonmakingthesubmission,
-    EmailAddress1,
-    MobileNumber,
-    Position,
-    Companyname,
-    Compannynumber,
-    ConsultationType,
-    ConsultationName,
-    Isthisanexistingbusiness,
-    Doyouownthebusiness,
-    Doyouworkinthisbusiness,
-    Pleaseselect3advicesyouwouldliketoreceive,
-    OtherAdvices,
+    azureId,
+    formId: formid,
+    name,
+    submittedBy,
+    emailAddress1,
+    mobileNumber,
+    position,
+    companyName,
+    compannyNumber,
+    consultationType,
+    consultationName,
+    existingBusiness,
+    businessOwnership,
+    worksHere,
+    selectedAdvice,
+    otherAdvices,
   };
 
   console.log("Sending consultation data to Power Automate:", data);

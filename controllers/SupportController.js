@@ -20,6 +20,7 @@ const CreateSupportRequest = async (req, res) => {
     priority,
     message,
     userId,
+    attachments,
   } = req.body; // Expect these fields to be passed in the body
   console.log(
     "body",
@@ -28,7 +29,8 @@ const CreateSupportRequest = async (req, res) => {
     subject,
     category,
     priority,
-    message
+    message,
+    attachments
   );
 
   // Validate input
@@ -56,6 +58,11 @@ const CreateSupportRequest = async (req, res) => {
     category,
     priority,
     message,
+    attachments: Array.isArray(attachments)
+      ? attachments
+      : attachments
+      ? [attachments]
+      : [],
   };
 
   console.log("Sending support data to Power Automate:", data);

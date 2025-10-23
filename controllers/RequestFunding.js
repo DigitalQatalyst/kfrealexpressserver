@@ -50,6 +50,39 @@ const RequestFunding = async (req, res) => {
     !scoredReport ||
     !consentAcknowledgement
   ) {
+    // return the missing field
+    if (!azureId) return res.status(400).json({ error: "azureId is required" });
+    if (!name) return res.status(400).json({ error: "name is required" });
+    if (!submittedBy)
+      return res.status(400).json({ error: "submittedBy is required" });
+    if (!emailAddress)
+      return res.status(400).json({ error: "emailAddress is required" });
+    if (!telephoneNumber)
+      return res.status(400).json({ error: "telephoneNumber is required" });
+    if (!companyName)
+      return res.status(400).json({ error: "companyName is required" });
+    if (!companyNumber)
+      return res.status(400).json({ error: "companyNumber is required" });
+    if (!position)
+      return res.status(400).json({ error: "position is required" });
+    if (!fundingProgram)
+      return res.status(400).json({ error: "fundingProgram is required" });
+    if (!projectName)
+      return res.status(400).json({ error: "projectName is required" });
+    if (!currentInvestment)
+      return res.status(400).json({ error: "currentInvestment is required" });
+    if (!loanAmount)
+      return res.status(400).json({ error: "loanAmount is required" });
+    if (!minContribution)
+      return res.status(400).json({ error: "minContribution is required" });
+    if (!TradeLicence)
+      return res.status(400).json({ error: "TradeLicence is required" });
+    if (!scoredReport)
+      return res.status(400).json({ error: "scoredReport is required" });
+    if (!consentAcknowledgement)
+      return res
+        .status(400)
+        .json({ error: "consentAcknowledgement is required" });
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -159,7 +192,6 @@ const getFundingRequests = async (req, res) => {
 
     // Return the response data
     res.status(200).json(response.data);
-
 
     return;
   } catch (error) {

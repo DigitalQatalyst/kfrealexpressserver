@@ -106,11 +106,13 @@ const getAccountProfile = async (req, res) => {
       "Data-MaxVersion": "4.0",
     };
     // test
+    const testname = "Von";
 
     // Make the GET request using axios
     const response = await axios.get(
       // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=kf_azureid eq \'${azureid}\'`,
-      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=kf_azureid eq \'${azureid}\'`,
+      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_firmonboardings$filter=kf_companyname eq \'${testname}\'`,
+      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=kf_azureid eq \'${azureid}\'`,
       // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=accountid eq \'${accountid}\'`,
 
       { headers }

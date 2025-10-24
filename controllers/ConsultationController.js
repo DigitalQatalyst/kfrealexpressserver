@@ -1,6 +1,6 @@
 const express = require("express");
 const axios = require("axios");
-const { getAccessToken } = require("../services/getFlowTokens");
+const { getAccessToken, fetchCRMToken } = require("../services/getFlowTokens");
 const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint

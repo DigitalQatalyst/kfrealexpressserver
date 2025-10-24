@@ -31,6 +31,10 @@ const BookConsultation = async (req, res) => {
     worksHere,
     selectedAdvice,
     otherAdvices,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
@@ -49,7 +53,11 @@ const BookConsultation = async (req, res) => {
     !businessOwnership ||
     !worksHere ||
     !selectedAdvice ||
-    !otherAdvices
+    !otherAdvices ||
+    !serviceName ||
+    !category ||
+    !status ||
+    !serviceProvider
   ) {
     return res.status(400).json({
       // error: "Missing required fields",
@@ -57,7 +65,6 @@ const BookConsultation = async (req, res) => {
       error: "Missing required fields",
       missingFields: [
         !azureId ? "azureId" : "",
-        !formId ? "formId" : "",
         !name ? "name" : "",
         !submittedBy ? "submittedBy" : "",
         !emailAddress1 ? "emailAddress1" : "",
@@ -72,6 +79,10 @@ const BookConsultation = async (req, res) => {
         !worksHere ? "worksHere" : "",
         !selectedAdvice ? "selectedAdvice" : "",
         !otherAdvices ? "otherAdvices" : "",
+        !serviceName ? "serviceName" : "",
+        !category ? "category" : "",
+        !status ? "status" : "",
+        !serviceProvider ? "serviceProvider" : "",
       ],
     });
   }
@@ -95,6 +106,10 @@ const BookConsultation = async (req, res) => {
     worksHere,
     selectedAdvice,
     otherAdvices,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   };
 
   console.log("Sending consultation data to Power Automate:", data);

@@ -29,6 +29,10 @@ const RequestFunding = async (req, res) => {
     TradeLicence,
     scoredReport,
     consentAcknowledgement,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
@@ -48,7 +52,11 @@ const RequestFunding = async (req, res) => {
     !minContribution ||
     !TradeLicence ||
     !scoredReport ||
-    !consentAcknowledgement
+    !consentAcknowledgement ||
+    !serviceName ||
+    !category ||
+    !status ||
+    !serviceProvider
   ) {
     // return the missing field
     if (!azureId) return res.status(400).json({ error: "azureId is required" });
@@ -83,6 +91,13 @@ const RequestFunding = async (req, res) => {
       return res
         .status(400)
         .json({ error: "consentAcknowledgement is required" });
+    if (!serviceName)
+      return res.status(400).json({ error: "serviceName is required" });
+    if (!category)
+      return res.status(400).json({ error: "category is required" });
+    if (!status) return res.status(400).json({ error: "status is required" });
+    if (!serviceProvider)
+      return res.status(400).json({ error: "serviceProvider is required" });
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -109,6 +124,10 @@ const RequestFunding = async (req, res) => {
     TradeLicence,
     scoredReport,
     consentAcknowledgement,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   };
 
   console.log("Sending funding request data to Power Automate:", data);

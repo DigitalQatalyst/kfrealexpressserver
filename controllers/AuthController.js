@@ -111,7 +111,9 @@ const getAccountProfile = async (req, res) => {
     // Make the GET request using axios
     const response = await axios.get(
       // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=kf_azureid eq \'${azureid}\'`,
-      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_firmonboardings$filter=kf_companyname eq \'${testname}\'`,
+      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_firmonboardings?$filter=kf_azureid eq '75f9e978-1c84-4156-a5f5-c700845385ae'`,
+      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_firmonboardings`,
+      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_firmonboardings$filter=kf_companyname eq \'${testname}\'`,
       // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=kf_azureid eq \'${azureid}\'`,
       // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=accountid eq \'${accountid}\'`,
 
@@ -282,6 +284,129 @@ const crmSignUp = async (req, res) => {
  * 3. Combine → account fields + contact fields (contact wins on overlap)
  * 4. Return a tidy JSON object
  */
+// const getUserProfile = async (req, res) => {
+//   const { azureid } = req.body;
+
+//   // ------------------------------------------------
+//   // 1. Input validation
+//   // ------------------------------------------------
+//   if (!azureid) {
+//     return res
+//       .status(400)
+//       .json({ error: "azureid is required in the request body" });
+//   }
+
+//   // ------------------------------------------------
+//   // 2. Get a fresh CRM token (pure function)
+//   // ------------------------------------------------
+//   let token;
+//   try {
+//     token = await fetchToken(); // <-- your pure token helper
+//   } catch (err) {
+//     console.error("Token fetch failed:", err);
+//     return res.status(500).json({ error: "Failed to obtain CRM token" });
+//   }
+
+//   // ------------------------------------------------
+//   // 3. Common headers for both calls
+//   // ------------------------------------------------
+//   const headers = {
+//     Authorization: token,
+//     Accept: "application/json",
+//     "OData-Version": "4.0",
+//     "OData-MaxVersion": "4.0",
+//   };
+
+//   // ------------------------------------------------
+//   // 4. Build the two OData URLs (both filter on azureid)
+//   // ------------------------------------------------
+//   const accountUrl = `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=kf_azureid eq '${azureid}'&$select=*&$expand=primarycontactid($select=contactid,firstname,lastname,emailaddress1,telephone1)`;
+//   const contactUrl = `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/contacts?$filter=kf_azureid eq '${azureid}'&$select=*`;
+//   const onboardingUrl = `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/contacts?$filter=kf_azureid eq '${azureid}'&$select=*`;
+
+//   try {
+//     console.log("Fetching account & contact for azureid:", azureid);
+
+//     // ------------------------------------------------
+//     // 5. Parallel requests (faster + less round-trips)
+//     // ------------------------------------------------
+//     const [accountRes, contactRes] = await Promise.all([
+//       axios.get(accountUrl, { headers }).catch(() => ({ data: { value: [] } })),
+//       axios.get(contactUrl, { headers }).catch(() => ({ data: { value: [] } })),
+//       axios.get(onboardingUrl, { headers }).catch(() => ({ data: { value: [] } })),
+//     ]);
+
+//     const account = accountRes.data.value[0] || null;
+//     const contact = contactRes.data.value[0] || null;
+//     const onboarding = onboardingRes.data.value[0] || null;
+//     // ------------------------------------------------
+//     // 6. Build merged profile
+//     // ------------------------------------------------
+//     const profile = {
+//       azureid,
+//       // ---- Account data (base layer) ----
+//       accountId: account?.accountid ?? null,
+//       accountName: account?.name ?? null,
+//       // add any other account fields you need here
+//       ...(account && { ...account }),
+
+//       // ---- Contact data (overlay – overwrites same keys) ----
+//       ...(contact && {
+//         contactId: contact.contactid,
+//         firstName: contact.firstname ?? null,
+//         lastName: contact.lastname ?? null,
+//         email: contact.emailaddress1 ?? null,
+//         phone: contact.telephone1 ?? null,
+//         // add any other contact fields you need
+//         ...contact,
+//       }),
+
+//       // ---- Metadata ----
+//       hasAccount: !!account,
+//       hasContact: !!contact,
+//       fetchedAt: new Date().toISOString(),
+//     };
+
+//     // Clean up noisy OData props
+//     delete profile["@odata.etag"];
+//     delete profile["@odata.type"];
+//     delete profile["@odata.context"]; // optional
+
+//     console.log("Merged profile ready");
+//     return res.status(200).json({
+//       success: true,
+//       profile,
+//       message: "User profile retrieved and merged successfully",
+//     });
+//   } catch (error) {
+//     // ------------------------------------------------
+//     // 7. Unified error handling
+//     // ------------------------------------------------
+//     console.error("User-profile error:", error.response?.data || error.message);
+//     if (axios.isAxiosError(error)) {
+//       return res.status(error.response?.status || 500).json({
+//         error: "Failed to fetch profile data",
+//         details: error.response?.data || error.message,
+//       });
+//     }
+//     return res.status(500).json({
+//       error: "Internal server error",
+//       details: error.message,
+//     });
+//   }
+// };
+
+/**
+ * GET USER PROFILE (merged Account + Contact + Onboarding)
+ * ------------------------------------------------
+ * Body: { azureid: "<azure-guid>" }
+ * ------------------------------------------------
+ * 1. Fetch Account  → $filter=kf_azureid eq '<azureid>'
+ * 2. Fetch Contact  → $filter=kf_azureid eq '<azureid>'
+ * 3. Fetch Onboarding → $filter=kf_azureid eq '<azureid>'
+ * 4. Combine → account fields + contact fields + onboarding fields (contact wins on overlap)
+ * 5. Return a tidy JSON object
+ */
 const getUserProfile = async (req, res) => {
   const { azureid } = req.body;
 
@@ -306,7 +431,7 @@ const getUserProfile = async (req, res) => {
   }
 
   // ------------------------------------------------
-  // 3. Common headers for both calls
+  // 3. Common headers for all calls
   // ------------------------------------------------
   const headers = {
     Authorization: token,
@@ -316,24 +441,32 @@ const getUserProfile = async (req, res) => {
   };
 
   // ------------------------------------------------
-  // 4. Build the two OData URLs (both filter on azureid)
+  // 4. Build the three OData URLs (all filter on azureid)
   // ------------------------------------------------
   const accountUrl = `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=kf_azureid eq '${azureid}'&$select=*&$expand=primarycontactid($select=contactid,firstname,lastname,emailaddress1,telephone1)`;
   const contactUrl = `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/contacts?$filter=kf_azureid eq '${azureid}'&$select=*`;
+  const onboardingUrl = `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_firmonboardings?$filter=kf_azureid eq '${azureid}'&$select=*`;
 
   try {
-    console.log("Fetching account & contact for azureid:", azureid);
+    console.log(
+      "Fetching account, contact, and onboarding for azureid:",
+      azureid
+    );
 
     // ------------------------------------------------
     // 5. Parallel requests (faster + less round-trips)
     // ------------------------------------------------
-    const [accountRes, contactRes] = await Promise.all([
+    const [accountRes, contactRes, onboardingRes] = await Promise.all([
       axios.get(accountUrl, { headers }).catch(() => ({ data: { value: [] } })),
       axios.get(contactUrl, { headers }).catch(() => ({ data: { value: [] } })),
+      axios
+        .get(onboardingUrl, { headers })
+        .catch(() => ({ data: { value: [] } })),
     ]);
 
     const account = accountRes.data.value[0] || null;
     const contact = contactRes.data.value[0] || null;
+    const onboarding = onboardingRes.data.value[0] || null;
 
     // ------------------------------------------------
     // 6. Build merged profile
@@ -357,16 +490,41 @@ const getUserProfile = async (req, res) => {
         ...contact,
       }),
 
+      // ---- Onboarding data (overlay – overwrites same keys) ----
+      ...(onboarding && {
+        onboardingId: onboarding.kf_firmonboardingid ?? null,
+        companyName: onboarding.kf_companyname ?? null,
+        fundingNeedsUSD: onboarding.kf_fundingneedsusd ?? null,
+        businessRequirements: onboarding.kf_businessrequirements ?? null,
+        address: onboarding.kf_address ?? null,
+        website: onboarding.kf_website ?? null,
+        emailAddress: onboarding.kf_emailaddress ?? null,
+        employeeCount: onboarding.kf_employeecount ?? null,
+        initialCapitalUSD: onboarding.kf_initialcapitalusd ?? null,
+        businessPitch: onboarding.kf_businesspitch ?? null,
+        phoneNumber: onboarding.kf_phone ?? null,
+        registrationNumber: onboarding.kf_registrationnumber ?? null,
+        foundingYear: onboarding.kf_foundingyear ?? null,
+        contactName: onboarding.kf_contactname ?? null,
+        city: onboarding.kf_city ?? null,
+        industry: onboarding.kf_industry ?? null,
+        founders: onboarding.kf_founders ?? null,
+        establishmentDate: onboarding.kf_establishmentdate ?? null,
+        // add any other onboarding fields you need
+        ...onboarding,
+      }),
+
       // ---- Metadata ----
       hasAccount: !!account,
       hasContact: !!contact,
+      hasOnboarding: !!onboarding,
       fetchedAt: new Date().toISOString(),
     };
 
     // Clean up noisy OData props
     delete profile["@odata.etag"];
     delete profile["@odata.type"];
-    delete profile["@odata.context"]; // optional
+    delete profile["@odata.context"];
 
     console.log("Merged profile ready");
     return res.status(200).json({

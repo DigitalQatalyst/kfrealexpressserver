@@ -417,6 +417,7 @@ const getUserProfile = async (req, res) => {
     return res
       .status(400)
       .json({ error: "azureid is required in the request body" });
+    // resposse
   }
 
   // ------------------------------------------------

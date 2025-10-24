@@ -12,10 +12,28 @@ const MembershipRequestFlowSecret = process.env.membershiprequest_secret;
 const RequestMembership = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
   console.log("📤 sending training request....");
-  const { azureId, name, submittedBy, emailAddress1 } = req.body; // Expect these fields to be passed in the body
+  const {
+    azureId,
+    name,
+    submittedBy,
+    emailAddress1,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
+  } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
-  if (!azureId || !name || !submittedBy || !emailAddress1) {
+  if (
+    !azureId ||
+    !name ||
+    !submittedBy ||
+    !emailAddress1 ||
+    !serviceName ||
+    !category ||
+    !status ||
+    !serviceProvider
+  ) {
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -29,6 +47,10 @@ const RequestMembership = async (req, res) => {
     name,
     submittedBy,
     emailAddress1,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   };
 
   console.log("Sending membership request data to Power Automate:", data);

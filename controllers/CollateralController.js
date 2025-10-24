@@ -22,6 +22,10 @@ const CreateCollateralUserGuide = async (req, res) => {
     assetName,
     assetNumber,
     additionalDetails,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   } = req.body;
   // Expect these fields to be passed in the body
 
@@ -37,7 +41,11 @@ const CreateCollateralUserGuide = async (req, res) => {
     !position ||
     !assetName ||
     !assetNumber ||
-    !additionalDetails
+    !additionalDetails ||
+    !serviceName ||
+    !category ||
+    !status ||
+    !serviceProvider
   ) {
     return res.status(400).json({
       error: "Missing required fields",
@@ -60,6 +68,10 @@ const CreateCollateralUserGuide = async (req, res) => {
     assetName,
     assetNumber,
     additionalDetails,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   };
 
   console.log("Sending collateral user guide data to Power Automate:", data);

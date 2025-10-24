@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken, fetchCRMToken } = require("../services/getFlowTokens");
+const { generateUUID } = require("../services/generateUuid");
 
 // Power Automate flow endpoint
 const FLOW_URL = process.env.membershiprequest_url;
@@ -11,20 +12,23 @@ const MembershipRequestFlowSecret = process.env.membershiprequest_secret;
 const RequestMembership = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
   console.log("📤 sending training request....");
-  const { Name, Nameofpersonmakingthesubmission, EmailAddress1 } = req.body; // Expect these fields to be passed in the body
+  const { azureId, name, submittedBy, emailAddress1 } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
-  if (!Name || !Nameofpersonmakingthesubmission || !EmailAddress1) {
+  if (!azureId || !name || !submittedBy || !emailAddress1) {
     return res.status(400).json({
       error: "Missing required fields",
     });
   }
+  const formid = await generateUUID();
 
   // Construct the data object to be sent to Power Automate
   const data = {
-    Name,
-    Nameofpersonmakingthesubmission,
-    EmailAddress1,
+    azureId,
+    formId: formid,
+    name,
+    submittedBy,
+    emailAddress1,
   };
 
   console.log("Sending membership request data to Power Automate:", data);

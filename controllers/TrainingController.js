@@ -11,7 +11,16 @@ const TrainingFlowSecret = process.env.training_secret;
 const CreateTraining = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
   console.log("📤 sending training request....");
-  const { Name, submittedBy, emailAddress, telephoneNumber } = req.body; // Expect these fields to be passed in the body
+  const {
+    Name,
+    submittedBy,
+    emailAddress,
+    telephoneNumber,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
+  } = req.body; // Expect these fields to be passed in the body
 
   // Validate input
   if (!Name || !submittedBy || !emailAddress || !telephoneNumber) {
@@ -26,6 +35,10 @@ const CreateTraining = async (req, res) => {
     submittedBy,
     emailAddress,
     telephoneNumber,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   };
 
   console.log("Sending training data to Power Automate:", data);

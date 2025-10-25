@@ -30,6 +30,10 @@ const CancelLoan = async (req, res) => {
     fundingNumber,
     cancellationDetails,
     consentAcknowledgement,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   } = req.body;
 
   // Create an array of required fields and their corresponding values
@@ -46,6 +50,10 @@ const CancelLoan = async (req, res) => {
     fundingNumber,
     cancellationDetails,
     consentAcknowledgement,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   };
 
   // Find missing fields
@@ -77,6 +85,10 @@ const CancelLoan = async (req, res) => {
     fundingNumber,
     cancellationDetails,
     consentAcknowledgement,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   };
 
   console.log("Sending loan cancellation data to Power Automate:", data);

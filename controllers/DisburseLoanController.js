@@ -34,6 +34,10 @@ const DisburseLoan = async (req, res) => {
     employeeList,
     consentAcknowledgement,
     sequenceNumber,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   } = req.body;
   // Expect these fields to be passed in the body
 
@@ -69,6 +73,10 @@ const DisburseLoan = async (req, res) => {
     employeeList,
     consentAcknowledgement,
     sequenceNumber,
+    serviceName,
+    category,
+    status,
+    serviceProvider,
   };
 
   console.log("Sending loan disburse data to Power Automate:", data);

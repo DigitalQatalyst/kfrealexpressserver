@@ -179,7 +179,7 @@ const IssueSupportLetter = async (req, res) => {
   const data = {
     azureId,
     formId: fid,
-    sequenceNumber,
+    sequenceNumber: Number(sequenceNumber),
     name,
     submittedBy,
     emailAddress,

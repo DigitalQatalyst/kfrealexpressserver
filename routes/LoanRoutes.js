@@ -18,7 +18,7 @@ router.use(express.urlencoded({ extended: true }));
 
 router.post("/cancel-loan", CancelLoan);
 router.post("/disburse-loan", DisburseLoan);
-router.get("/get-cancel-loans", getCancelLoans);
+router.get("/get-cancel-loans/:id", getCancelLoans);
 router.get("/get-amend-existing-loan", getAmendExistingLoan);
 router.get("/get-disbursed-loans", getDisbursedLoans);
 router.get(

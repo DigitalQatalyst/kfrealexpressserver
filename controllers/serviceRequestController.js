@@ -83,47 +83,47 @@ const getAllServiceRequests = async (req, res) => {
     const endpoints = [
       {
         name: "Request for Membership",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_requestformembershipforms?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_requestformembershipforms?$filter=kf_azureid eq ${userId}`,
       },
       {
         name: "Amend Existing Loan Details",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_amendexistingloandetailsforms?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_amendexistingloandetailsforms?$filter=kf_azureid eq ${userId}`,
       },
       {
         name: "Book Consultation for Entrepreneurs",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_consultationguides?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_consultationguides?$filter=kf_azureid eq ${userId}`,
       },
       {
         name: "Request to Cancel Loan",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_cancelloanforms?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_cancelloanforms?$filter=kf_azureid eq ${userId}`,
       },
       {
         name: "Issue Support Letter",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_issuesupportletterforms?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_issuesupportletterforms?$filter=kf_azureid eq ${userId}`,
       },
       {
         name: "Reallocation of Loan Disbursement",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_reallocationofloandisbursementforms?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_reallocationofloandisbursementforms?$filter=kf_azureid eq ${userId}`,
       },
       {
         name: "Disburse an Approved Loan",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_reallocationofloandisbursementforms?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_reallocationofloandisbursementforms?$filter=kf_azureid eq ${userId}`,
       },
       {
         name: "Release Collateral for Funded Project Assets",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_collateraluserguidesforms?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_collateraluserguidesforms?$filter=kf_azureid eq ${userId}`,
       },
       {
         name: "Request for Funding",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_requestforfundings?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_requestforfundings?$filter=kf_azureid eq ${userId}`,
       },
       {
         name: "Training in Entrepreneurship",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_traininginentrepreneurships?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_traininginentrepreneurships?$filter=kf_azureid eq ${userId}`,
       },
       {
         name: "Facilitate Communication with Stakeholders",
-        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_facilitatecommunicationwithstakeholdersforms?$filter=_owninguser_value eq ${userId}`,
+        url: `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_facilitatecommunicationwithstakeholdersforms?$filter=kf_azureid eq ${userId}`,
       },
     ];
 
@@ -144,6 +144,7 @@ const getAllServiceRequests = async (req, res) => {
           count: 0,
         }))
     );
+
 
     // Wait for all requests to complete
     const results = await Promise.all(requests);

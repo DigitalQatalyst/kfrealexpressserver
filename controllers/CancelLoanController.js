@@ -123,12 +123,8 @@ const CancelLoan = async (req, res) => {
 
 const getCancelLoans = async (req, res) => {
   const token = await fetchCRMToken();
-  const { accountid } = req.body;
-
-  // log
-  // console.log("req body",token,accountid)
-  // return
-
+  // const { accountid } = req.body;
+  const{id} = req.params
   if (!token) {
     return res
       .status(400)
@@ -146,8 +142,8 @@ const getCancelLoans = async (req, res) => {
 
     // Make the GET request using axios
     const response = await axios.get(
-      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=accountid eq \'${accountid}\'`,
-      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_cancelloanforms`,
+      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_cancelloanforms`,
+      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_cancelloanforms?$filter=kf_azureid eq ${id}`,
       { headers }
     );
 

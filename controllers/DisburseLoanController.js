@@ -149,7 +149,8 @@ const getDisbursedLoans = async (req, res) => {
     // Make the GET request using axios
     const response = await axios.get(
       // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/accounts?$filter=accountid eq \'${accountid}\'`,
-      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_reallocationofloandisbursementforms`,
+      `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_disburseanapprovedloanforms`,
+      // `https://kf-dev-a.crm15.dynamics.com/api/data/v9.2/kf_reallocationofloandisbursementforms`,
       { headers }
     );
 

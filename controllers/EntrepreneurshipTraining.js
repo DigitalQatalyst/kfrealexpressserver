@@ -157,7 +157,7 @@ const CreateEntrepreneurshipTraining = async (req, res) => {
   } catch (error) {
     console.error(
       "Error:",
-      error.response ? error.response.data : error.message
+      error.response ? error.response.status : error.status
     );
     res.status(error.response?.status || 500).json({
       error: "Failed to send data to Power Automate flow",

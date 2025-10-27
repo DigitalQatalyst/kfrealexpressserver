@@ -14,7 +14,6 @@ const DisburseLoan = async (req, res) => {
   console.log("📤 sending loan disburse request....");
   const {
     azureId,
-    userId,
     name,
     submittedBy,
     emailAddress,
@@ -53,7 +52,6 @@ const DisburseLoan = async (req, res) => {
   const data = {
     FormId: formid,
     azureId,
-    UserId: userId,
     Name: name,
     SubmittedBy: submittedBy,
     EmailAddress: emailAddress,

@@ -15,13 +15,13 @@ const CreateSupportRequest = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
   console.log("📤 sending support request....");
   const {
+    azureId,
     fullName,
     emailAddress,
     subject,
     category,
     priority,
     message,
-    userId,
     attachments,
   } = req.body; // Expect these fields to be passed in the body
   console.log(
@@ -52,7 +52,7 @@ const CreateSupportRequest = async (req, res) => {
   // Construct the data object to be sent to Power Automate
   const fid = await generateUUID();
   const data = {
-    userId,
+    azureId,
     formId: fid,
     fullName,
     emailAddress,

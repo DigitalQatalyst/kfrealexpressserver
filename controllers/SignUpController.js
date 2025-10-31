@@ -136,5 +136,5 @@ const getAllProfiles = async (req, res) => {
 
 module.exports = {
   CreateAccount,
-  getAllProfiles,
+  // getAllProfiles,
 };

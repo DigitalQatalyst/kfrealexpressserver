@@ -551,10 +551,68 @@ const getUserProfile = async (req, res) => {
   }
 };
 
+
+const getProfileByCookie = async (req, res) => {
+    const { azureid } = req.params;
+
+    const CRM_COOKIE = process.env.CRM_AUTH_COOKIE;
+
+    if (!azureid) {
+        return res
+            .status(400)
+            .json({ error: "azureid is required in the URL path." });
+    }
+
+    if (!CRM_COOKIE) {
+        return res.status(500).json({ error: "CRM_AUTH_COOKIE is missing. Cookie-based authentication failed to initialize." });
+    }
+
+    const crmBaseUrl = "https://kf-dev-a.crm15.dynamics.com/api/data/v9.2";
+    const filter = `$filter=_ownerid_value eq '${azureid}'`;
+    const url = `${crmBaseUrl}/kf_profiles?${filter}`;
+
+    console.log("Fetching kf_profile with URL (Cookie Auth):", url);
+
+    const headers = {
+        "Cookie": CRM_COOKIE,
+        "Accept": "application/json",
+    };
+
+    try {
+        const response = await axios.get(url, { headers });
+
+        const profiles = response.data.value;
+
+        if (profiles && profiles.length > 0) {
+            return res.status(200).json({
+                success: true,
+                profile: profiles[0],
+                message: "User profile (kf_profiles) retrieved successfully via cookie auth",
+            });
+        } else {
+            return res.status(404).json({ message: `No profile found for Azure OID: ${azureid}` });
+        }
+
+    } catch (error) {
+        console.error("Cookie-based profile error:", error.response?.data || error.message);
+        if (axios.isAxiosError(error)) {
+            return res.status(error.response?.status || 500).json({
+                error: "Failed to fetch profile data (Cookie may be expired)",
+                details: error.response?.data || error.message,
+            });
+        }
+        return res.status(500).json({
+            error: "Internal server error",
+            details: error.message,
+        });
+    }
+};
+
 module.exports = {
   getToken,
   getAccountProfile,
   getContactInformation,
   crmSignUp,
   getUserProfile,
+    getProfileByCookie,
 };

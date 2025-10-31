@@ -20,8 +20,6 @@ const CreateAccount = async (req, res) => {
     countryRegion,
     lifecycleStage,
     agreeToTerms,
-    enterpriseName,
-    azureId,
   } = req.body; // Expect these fields to be passed in the body
   console.log("body", req.body);
 
@@ -34,9 +32,7 @@ const CreateAccount = async (req, res) => {
     !companyName ||
     !countryRegion ||
     !lifecycleStage ||
-    !agreeToTerms ||
-    !enterpriseName ||
-    !azureId
+    !agreeToTerms
   ) {
     console.log("Missing required fields");
     // logs s
@@ -54,9 +50,9 @@ const CreateAccount = async (req, res) => {
     companyName,
     countryRegion,
     lifecycleStage,
-    agreeToTerms,
-    enterpriseName,
-    azureId,
+    // agreeToTerms,
+    // boolean
+    agreeToTerms: Boolean(agreeToTerms),
   };
 
   console.log("Sending account data to Power Automate:", data);

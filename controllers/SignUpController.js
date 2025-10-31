@@ -21,7 +21,6 @@ const CreateAccount = async (req, res) => {
     lifecycleStage,
     agreeToTerms,
   } = req.body; // Expect these fields to be passed in the body
-  console.log("body", req.body);
 
   // Validate input
   if (

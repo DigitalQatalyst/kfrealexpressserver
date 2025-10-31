@@ -11,10 +11,34 @@ const SignupFlowSecret = process.env.signup_secret;
 const CreateAccount = async (req, res) => {
   //   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
   console.log("📤 sending create account request....");
-  const { email, givenName, azureId, contactId, surname } = req.body; // Expect these fields to be passed in the body
+  const {
+    email,
+    firstName,
+    phoneNumber,
+    lastName,
+    companyName,
+    countryRegion,
+    lifecycleStage,
+    agreeToTerms,
+    enterpriseName,
+    azureId,
+  } = req.body; // Expect these fields to be passed in the body
+  console.log("body", req.body);
 
   // Validate input
-  if (!email || !givenName || !azureId || !contactId || !surname) {
+  if (
+    !email ||
+    !firstName ||
+    !lastName ||
+    !phoneNumber ||
+    !companyName ||
+    !countryRegion ||
+    !lifecycleStage ||
+    !agreeToTerms ||
+    !enterpriseName ||
+    !azureId
+  ) {
+    console.log("Missing required fields");
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -23,10 +47,15 @@ const CreateAccount = async (req, res) => {
   // Construct the data object to be sent to Power Automate
   const data = {
     email,
-    givenName,
+    firstName,
+    lastName,
+    phoneNumber,
+    companyName,
+    countryRegion,
+    lifecycleStage,
+    agreeToTerms,
+    enterpriseName,
     azureId,
-    contactId,
-    surname,
   };
 
   console.log("Sending account data to Power Automate:", data);

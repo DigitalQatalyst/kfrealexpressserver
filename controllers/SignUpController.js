@@ -39,7 +39,7 @@ const CreateAccount = async (req, res) => {
     !azureId
   ) {
     console.log("Missing required fields");
-    // logs
+    // logs s
     return res.status(400).json({
       error: "Missing required fields",
     });
